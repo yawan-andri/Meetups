@@ -1,8 +1,29 @@
-﻿namespace Meetups.WebApp.Features.Events.CreateEvent
+﻿using AutoMapper;
+using Meetups.WebApp.Data;
+using Meetups.WebApp.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Meetups.WebApp.Features.Events.CreateEvent
 {
 	public class CreateEventService
 	{
-		public CreateEventService() { }
+		private readonly IDbContextFactory<ApplicationDbContext> contextFactory;
+		private readonly IMapper mapper;
+
+		public CreateEventService(IDbContextFactory<ApplicationDbContext> contextFactory, IMapper mapper)
+		{
+			this.contextFactory = contextFactory;
+			this.mapper = mapper;
+		}
+
+		public async Task CreateEvent(EventViewModel eventViewModel)
+		{
+			using var context = contextFactory.CreateDbContext();
+
+			var eventEntity = mapper.Map<Event>(eventViewModel);
+			context.Events?.Add(eventEntity);
+			await context.SaveChangesAsync();
+		}
 
 		public string? ValidateEvent(EventViewModel eventViewModel)
 		{

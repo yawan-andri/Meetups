@@ -1,5 +1,6 @@
 ﻿@page "/events/create"
 
+@inject NavigationManager NavigationManager
 @inject CreateEventService CreateEventService
 
 @if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -68,10 +69,18 @@
 
     string? errorMessage = string.Empty;
 
-    private void CreateEvent()
+    private async Task CreateEvent()
     {
         errorMessage = CreateEventService.ValidateEvent(_eventViewModel);
+        if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            return;
+        }
 
         // Save Event
+        await CreateEventService.CreateEvent(_eventViewModel);
+
+        NavigationManager.NavigateTo("/");
+
     }
 }

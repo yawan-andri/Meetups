@@ -1,9 +1,71 @@
 ﻿@page "/"
 
+@using Meetups.WebApp.Features.Events.CreateEvent
+@inject ViewCreatedEventsService ViewCreatedEventsService
+
 <h3>Created Events</h3>
 
-<a href="/events/create" class="btn btn-primary">Create New Meetup</a>
+<a href="/events/create" class="btn btn-primary mb-2">Create New Meetup</a>
+
+@if (_createdEvents == null)
+{
+    <p><em>Loading meetups...</em></p>
+}
+else if (!_createdEvents.Any())
+{
+    <div class="alert alert-info">Belum ada meetup yang dibuat.</div>
+}
+else
+{
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Begin Time</th>
+                <th>End Time</th>
+                <th>Capacity</th>
+                <th>Category</th>
+                <th>Location/Link</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meetup in _createdEvents)
+            {
+                <tr>
+                    <td>@meetup.Title</td>
+                    <td>@meetup.BeginDate.ToShortDateString() | @meetup.BeginTime</td>
+                    <td>@meetup.EndDate.ToShortDateString() | @meetup.EndTime</td>
+                    <td>
+                        @{
+                            if(meetup.Capacity == 0)
+                            {
+                                <text>Unlimited</text>
+                            }
+                            else
+                            {
+                                <text>@meetup.Capacity</text>
+                            }
+                        }
+                    </td>
+                    <td><span class="badge bg-secondary">@meetup.Category</span></td>
+                    <td>
+                        @(meetup.Category == "InPerson" ? meetup.Location : meetup.MeetupLink)
+                    </td>
+                    <td>
+                        <a href="/events/edit/@meetup.EventId" class="btn btn-sm btn-outline-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<EventViewModel>? _createdEvents;
 
+    protected override async Task OnInitializedAsync()
+    {
+        _createdEvents = await ViewCreatedEventsService.GetEventsAsync();
+    }
 }
