@@ -1,4 +1,4 @@
-﻿namespace Meetups.WebApp.Features.Events.CreateEvent
+﻿namespace Meetups.WebApp.Features.CreateEvent
 {
 	public enum MeetupCategoriesEnum
 	{
