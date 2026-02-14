@@ -1,7 +1,9 @@
-using Meetups.WebApp.Components;
+using Meetups.WebApp.Features.Events.CreateEvent;
 using Meetups.WebApp.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<CreateEventService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
