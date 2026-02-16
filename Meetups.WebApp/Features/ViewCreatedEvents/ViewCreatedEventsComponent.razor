@@ -32,7 +32,19 @@ else
             @foreach (var meetup in _createdEvents)
             {
                 <tr>
-                    <td>@meetup.Title</td>
+                    <td style="text-align:center;">
+                        @{
+                            var eventImage = meetup.ImageUrl;
+                            if (string.IsNullOrWhiteSpace(eventImage))
+                            {
+                                eventImage = "/images/NoImageFound.png";
+                            }
+
+                            <img src="@eventImage" alt="Event Image" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
+                        }
+                        <br />
+                        @meetup.Title
+                    </td>
                     <td>@meetup.BeginDate.ToShortDateString() | @meetup.BeginTime</td>
                     <td>@meetup.EndDate.ToShortDateString() | @meetup.EndTime</td>
                     <td>

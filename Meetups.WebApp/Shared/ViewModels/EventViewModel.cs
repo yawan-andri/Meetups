@@ -1,4 +1,4 @@
-﻿using Meetups.WebApp.Features.CreateEvent;
+﻿using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel.DataAnnotations;
 
 namespace Meetups.WebApp.Shared.ViewModels
@@ -35,7 +35,12 @@ namespace Meetups.WebApp.Shared.ViewModels
 
 		[Range(0, int.MaxValue)]
 		public int Capacity { get; set; }
-		
+
+		[Required(ErrorMessage = "Please upload a cover image for meetup.")]
+		public IBrowserFile CoverImage { get; set; }
+
+		public string? ImageUrl { get; set; }
+
 		public int OrganizerId { get; set; }
 
 		public EventViewModel()
@@ -46,6 +51,7 @@ namespace Meetups.WebApp.Shared.ViewModels
 			EndTime = TimeOnly.FromDateTime(DateTime.Now);
 
 			Category = MeetupCategoriesEnum.InPerson.ToString();
+			ImageUrl = $"/images/NoImageFound.png";
 		}
 
 		public string? ValidateDates()
